@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        timePicker.setCurrentMinute(timePicker.getCurrentMinute() + 1);
+        timePicker.setCurrentMinute(timePicker.getCurrentMinute() + 5);
 
         context = getBaseContext();
 
@@ -73,7 +74,50 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        LoadPreferences();
+    }
 
+    private void LoadPreferences()
+    {
+
+        try {
+
+            String daysOfWeek = DroidPreferences.GetString(context, "DaysOfWeek");
+
+            if (daysOfWeek.contains("1")) {
+                chkDom.setChecked(true);
+            }
+            if (daysOfWeek.contains("2")) {
+                chkSeg.setChecked(true);
+            }
+            if (daysOfWeek.contains("3")) {
+                chkTer.setChecked(true);
+            }
+            if (daysOfWeek.contains("4")) {
+                chkQua.setChecked(true);
+            }
+            if (daysOfWeek.contains("5")) {
+                chkQui.setChecked(true);
+            }
+            if (daysOfWeek.contains("6")) {
+                chkSex.setChecked(true);
+            }
+            if (daysOfWeek.contains("7")) {
+                chkSab.setChecked(true);
+            }
+
+            int prefHour = DroidPreferences.GetInteger(context, "timePickerHour");
+            int prefMinute = DroidPreferences.GetInteger(context, "timePickerMinute");
+
+            timePicker.setCurrentHour(prefHour);
+            timePicker.setCurrentMinute(prefMinute);
+
+
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidAlarmClock", "LoadPreferences - Erro: " + ex.getMessage());
+        }
     }
 
     private ArrayList<Integer> SetDaysOfWeek() {
@@ -111,7 +155,12 @@ public class MainActivity extends AppCompatActivity {
             alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
             Intent intent = new Intent(context, AlarmBroadcast.class);
-            intent.putIntegerArrayListExtra("DaysOfWeek", SetDaysOfWeek());
+
+            ArrayList<Integer> daysOfWeek = SetDaysOfWeek();
+            intent.putIntegerArrayListExtra("DaysOfWeek",daysOfWeek );
+            DroidPreferences.SetString(context, "DaysOfWeek", daysOfWeek.toString());
+            DroidPreferences.SetInteger(context, "timePickerHour", timePicker.getCurrentHour());
+            DroidPreferences.SetInteger(context, "timePickerMinute", timePicker.getCurrentMinute());
 
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -123,8 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 addDay = true;
             } else if (timePicker.getCurrentHour() == calendar.getTime().getHours()) {
 
-                if (timePicker.getCurrentMinute() < calendar.getTime().getMinutes())
-                {
+                if (timePicker.getCurrentMinute() < calendar.getTime().getMinutes()) {
                     addDay = true;
                 }
             }
@@ -137,9 +185,7 @@ public class MainActivity extends AppCompatActivity {
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             Toast.makeText(context, "Alarme agendado com sucesso! ", Toast.LENGTH_SHORT).show();
 
-
-
-            Log.d("DroidAlarmClock", "Alarme agendado em " +  DateFormat.format("yyyyMMdd HH:mm", calendar.getTime()).toString()  );
+            Log.d("DroidAlarmClock", "Alarme agendado em " + DateFormat.format("yyyyMMdd HH:mm", calendar.getTime()).toString());
             finish();
         } catch (Exception ex) {
             Toast.makeText(context, "Não foi possivel agendar o alarme. " + ex.getMessage(), Toast.LENGTH_SHORT).show();
