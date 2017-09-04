@@ -183,12 +183,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-            Toast.makeText(context, "Alarme agendado com sucesso! ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Alarme agendado com sucesso! ", Toast.LENGTH_LONG).show();
 
             Log.d("DroidAlarmClock", "Alarme agendado em " + DateFormat.format("yyyyMMdd HH:mm", calendar.getTime()).toString());
             finish();
         } catch (Exception ex) {
-            Toast.makeText(context, "Não foi possivel agendar o alarme. " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Não foi possivel agendar o alarme. " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
 
