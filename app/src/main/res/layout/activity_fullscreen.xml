@@ -15,7 +15,7 @@
         android:gravity="center"
         android:keepScreenOn="true"
         android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
+        android:textColor="@color/colorWhite"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -41,10 +41,13 @@
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="138dp"
-                android:textSize="30sp"
-                android:text="Cancelar Alarme" />
+                android:text="Toque aqui para cancelar"
+                android:textColor="@color/colorWhite"
+                android:textSize="30sp" />
 
         </LinearLayout>
+
     </FrameLayout>
+
 
 </FrameLayout>

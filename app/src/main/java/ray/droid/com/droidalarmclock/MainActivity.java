@@ -9,10 +9,13 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.SyncStateContract;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        timePicker.setCurrentMinute(timePicker.getCurrentMinute()+1);
+        timePicker.setCurrentMinute(timePicker.getCurrentMinute() + 1);
 
         context = getBaseContext();
 
@@ -73,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<Integer> SetDaysOfWeek()
-    {
+    private ArrayList<Integer> SetDaysOfWeek() {
         ArrayList<Integer> days = new ArrayList<>();
 
         if (chkDom.isChecked()) {
@@ -101,34 +103,54 @@ public class MainActivity extends AppCompatActivity {
         return days;
     }
 
-    private void SetAlarm()
-    {
+    private void SetAlarm() {
         try {
             AlarmManager alarmMgr;
             PendingIntent alarmIntent;
 
             alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
             Intent intent = new Intent(context, AlarmBroadcast.class);
             intent.putIntegerArrayListExtra("DaysOfWeek", SetDaysOfWeek());
+
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Calendar calendar = Calendar.getInstance();
+
+            boolean addDay = false;
+
+            if (timePicker.getCurrentHour() < calendar.getTime().getHours()) {
+                addDay = true;
+            } else if (timePicker.getCurrentHour() == calendar.getTime().getHours()) {
+
+                if (timePicker.getCurrentMinute() < calendar.getTime().getMinutes())
+                {
+                    addDay = true;
+                }
+            }
             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
             calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+            if (addDay) {
+                calendar.add(Calendar.DATE, 1);
+            }
 
             alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             Toast.makeText(context, "Alarme agendado com sucesso! ", Toast.LENGTH_SHORT).show();
-        }
-        catch (Exception ex)
-        {
+
+
+
+            Log.d("DroidAlarmClock", "Alarme agendado em " +  DateFormat.format("yyyyMMdd HH:mm", calendar.getTime()).toString()  );
+            finish();
+        } catch (Exception ex) {
             Toast.makeText(context, "Não foi possivel agendar o alarme. " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
     @Override
     protected void onDestroy() {
-         super.onDestroy();
+        super.onDestroy();
     }
 
 

@@ -11,13 +11,14 @@
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="5" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingBottom="30dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="30dp"
+        android:paddingTop="30dp">
 
         <CheckBox
             android:id="@+id/chkSeg"
@@ -72,17 +73,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Dom"
+            android:text="Dom "
             android:textSize="9sp" />
     </LinearLayout>
-
+    
     <Button
         android:id="@+id/btnAgendar"
         android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:background="@color/colorAccent"
+        android:text="Agendar"
         android:textColor="@color/colorWhite"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Agendar" />
+        android:textSize="30sp" />
 
 </LinearLayout>

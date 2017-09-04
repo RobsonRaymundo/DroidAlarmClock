@@ -6,12 +6,16 @@ import android.media.AudioAttributes;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 /**
@@ -19,9 +23,10 @@ import android.widget.Toast;
  * status bar and navigation/system bar) with user interaction.
  */
 
-
-
 public class FullscreenActivity extends AppCompatActivity {
+
+    private PowerManager.WakeLock mWakeLock;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -64,11 +69,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
         public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
+
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
@@ -128,8 +129,11 @@ public class FullscreenActivity extends AppCompatActivity {
         ringtoneManager = RingtoneManager.getRingtone(context.getApplicationContext(), notification);
         ringtoneManager.play();
 
-        Toast.makeText(context, "Alarme disparado", Toast.LENGTH_SHORT).show();
-
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "FullscreenActivity");
+        mWakeLock.acquire();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
     }
 
