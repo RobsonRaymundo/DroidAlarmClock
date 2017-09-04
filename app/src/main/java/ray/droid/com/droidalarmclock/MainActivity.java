@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
-        timePicker.setCurrentMinute(timePicker.getCurrentMinute() + 5);
-
+        
         context = getBaseContext();
 
         chkSeg = (CheckBox) findViewById(R.id.chkSeg);
