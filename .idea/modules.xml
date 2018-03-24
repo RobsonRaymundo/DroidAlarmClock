@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DroidAlarmClock.iml" filepath="$PROJECT_DIR$/DroidAlarmClock.iml" />
-      <module fileurl="file://C:\Android\DroidAlarmClock\DroidAlarmClock.iml" filepath="C:\Android\DroidAlarmClock\DroidAlarmClock.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Android\DroidAlarmClock\app\app.iml" filepath="C:\Android\DroidAlarmClock\app\app.iml" />
     </modules>
   </component>
 </project>
